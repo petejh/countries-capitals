@@ -1,0 +1,16 @@
+{
+  "name": "countries-capitals",
+  "version": "0.0.0",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/petejh0/countries-capitals"
+  },
+  "author": "petejh",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/petejh0/countries-capitals/issues"
+  },
+  "devDependencies": {
+    "gulp": "^3.8.5"
+  }
+}
