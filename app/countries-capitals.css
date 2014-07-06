@@ -1,0 +1,17 @@
+body {
+  font-family: sans-serif;
+  font-size: 16px;
+}
+
+h1 {
+  font-size: 300%;
+  line-height: 100%;
+}
+
+#masthead {
+  padding: 1rem 1rem 2rem 1rem;
+  text-align: center;
+  border-bottom: 2px solid #000;
+  margin-bottom: 1rem;
+}
+

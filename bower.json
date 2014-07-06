@@ -19,6 +19,7 @@
   ],
   "dependencies": {
     "angular": "~1.2.19",
-    "angular-route": "~1.2.19"
+    "angular-route": "~1.2.19",
+    "normalize.css": "~3.0.1"
   }
 }
