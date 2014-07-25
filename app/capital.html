@@ -5,6 +5,38 @@
 <p>
   This view will also display an image of the flag and map for the country.
 </p>
+<table>
+  <tr>
+    <td>Population of Country:</td>
+    <td>{{ countryDetails.population | number }}</td>
+  </tr>
+  <tr>
+    <td>Area:</td>
+    <td>{{ countryDetails.areaInSqKm | number }}</td>
+  </tr>
+  <tr>
+    <td>Capital:</td>
+    <td>{{ countryDetails.capital }}</td>
+  </tr>
+  <tr>
+    <td>Population of Capital:</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>Timezone:</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>Continent:</td>
+    <td>{{ countryDetails.continent }}</td>
+  </tr>
+  <tr>
+    <td>Neighbors:</td>
+    <td></td>
+  </tr>
+</table>
+<img ng-src="http://www.geonames.org/img/country/250/{{ country }}.png">
+<img ng-src="http://www.geonames.org/flags/x/{{ country.toLowerCase() }}.gif">
 <p>
   <a href="#">Home</a> |
   <a href="#countries">Browse Countries</a>

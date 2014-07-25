@@ -2,6 +2,7 @@ angular.module('CountriesCapitals', ['ngRoute'])
 
   .constant('CNC_API_BASE', 'http://api.geonames.org')
   .constant('CNC_COUNTRIES', '/countryInfoJSON')
+  .constant('CNC_COUNTRY_DETAIL', '?country={{ country }}')
   .constant('CNC_USERNAME', 'petejh')
 
   .factory('cnc_Countries', function($http, CNC_API_BASE, CNC_COUNTRIES, CNC_USERNAME) {
@@ -16,9 +17,30 @@ angular.module('CountriesCapitals', ['ngRoute'])
         },
         cache: true
       }).success(function(response) {
-          angular.copy(response.geonames, countries);
-        })
+        angular.copy(response.geonames, countries);
+      });
       return countries;
+    };
+  })
+
+  .factory('cnc_CountryDetail', function($q, $http, $interpolate, CNC_API_BASE, CNC_COUNTRIES, CNC_COUNTRY_DETAIL, CNC_USERNAME) {
+    return function(countryCode) {
+      var countryDetails = [];
+      var query = $interpolate(CNC_COUNTRY_DETAIL)({
+        country: countryCode
+      });
+      $http({
+        method: 'JSONP',
+        url: CNC_API_BASE + CNC_COUNTRIES + query,
+        params: {
+          username: CNC_USERNAME,
+          callback: 'JSON_CALLBACK'
+        },
+        cache: true
+      }).success(function(response) {
+        angular.copy(response.geonames, countryDetails);
+      });
+      return countryDetails;
     };
   })
 
@@ -54,7 +76,8 @@ angular.module('CountriesCapitals', ['ngRoute'])
     $scope.countries = cnc_Countries();
   })
 
-  .controller('CapitalCtrl', function($scope, country) {
+  .controller('CapitalCtrl', function($scope, country, cnc_CountryDetail) {
     $scope.country = country;
+    $scope.countryDetails = cnc_CountryDetail(country);
   });
 
