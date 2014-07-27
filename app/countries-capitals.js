@@ -1,46 +1,55 @@
 angular.module('CountriesCapitals', ['ngRoute'])
 
-  .constant('CNC_API_BASE', 'http://api.geonames.org')
-  .constant('CNC_COUNTRIES', '/countryInfoJSON')
-  .constant('CNC_COUNTRY_DETAIL', '?country={{ country }}')
-  .constant('CNC_USERNAME', 'petejh')
+  .constant('CNC_API_CONFIG', {
+    API_BASE: 'http://api.geonames.org',
+    METHOD: 'JSONP',
+    CALLBACK: 'JSON_CALLBACK',
+    COUNTRY_ENDPOINT: '/countryInfoJSON',
+    NEIGHBORS_ENDPOINT: '/neighboursJSON', // note UK spelling for endpoint
+    CAPITAL_ENDPOINT: '/searchJSON',
+    USERNAME: 'petejh'
+  })
 
-  .factory('cnc_Countries', function($http, CNC_API_BASE, CNC_COUNTRIES, CNC_USERNAME) {
-    return function() {
-      var countries = [];
+  .factory('cnc_GetGeonames', function($http, CNC_API_CONFIG) {
+    return function(endpoint, queryParams) {
+      var geonamesAttributes = [];
+      var apiParams = {
+        username: CNC_API_CONFIG.USERNAME,
+        callback: CNC_API_CONFIG.CALLBACK
+      };
       $http({
-        method: 'JSONP',
-        url: CNC_API_BASE + CNC_COUNTRIES,
-        params: {
-          username: CNC_USERNAME,
-          callback: 'JSON_CALLBACK'
-        },
+        method: CNC_API_CONFIG.METHOD,
+        url: CNC_API_CONFIG.API_BASE + endpoint,
+        params: angular.extend( apiParams, queryParams),
         cache: true
       }).success(function(response) {
-        angular.copy(response.geonames, countries);
+        angular.copy(response.geonames, geonamesAttributes);
       });
-      return countries;
+      return geonamesAttributes;
     };
   })
 
-  .factory('cnc_CountryDetail', function($q, $http, $interpolate, CNC_API_BASE, CNC_COUNTRIES, CNC_COUNTRY_DETAIL, CNC_USERNAME) {
+  .factory('cnc_GetCountryDetails', function($http, CNC_API_CONFIG, cnc_GetGeonames) {
     return function(countryCode) {
-      var countryDetails = [];
-      var query = $interpolate(CNC_COUNTRY_DETAIL)({
+      var queryParams = { country: countryCode };
+      return cnc_GetGeonames(CNC_API_CONFIG.COUNTRY_ENDPOINT, queryParams);
+    };
+  })
+
+  .factory('cnc_GetNeighbors', function($http, CNC_API_CONFIG, cnc_GetGeonames) {
+    return function(countryCode) {
+      var queryParams = { country: countryCode };
+      return cnc_GetGeonames(CNC_API_CONFIG.NEIGHBORS_ENDPOINT, queryParams);
+    };
+  })
+
+  .factory('cnc_GetCapitalDetails', function($http, CNC_API_CONFIG, cnc_GetGeonames) {
+    return function(countryCode) {
+      var queryParams = {
+        featureCode: 'PPLC',
         country: countryCode
-      });
-      $http({
-        method: 'JSONP',
-        url: CNC_API_BASE + CNC_COUNTRIES + query,
-        params: {
-          username: CNC_USERNAME,
-          callback: 'JSON_CALLBACK'
-        },
-        cache: true
-      }).success(function(response) {
-        angular.copy(response.geonames, countryDetails);
-      });
-      return countryDetails;
+      };
+      return cnc_GetGeonames(CNC_API_CONFIG.CAPITAL_ENDPOINT, queryParams);
     };
   })
 
@@ -50,13 +59,13 @@ angular.module('CountriesCapitals', ['ngRoute'])
     }).when('/countries', {
       templateUrl: 'countries.html',
       controller: 'CountriesCtrl'
-    }).when('/countries/:country/capital', {
+    }).when('/countries/:countryCode/capital', {
       templateUrl: 'capital.html',
       controller: 'CapitalCtrl',
       resolve: {
-        country: function($route) {
-          // TODO validate :country against a list of defined country codes
-          return $route.current.params.country;
+        countryCode: function($route) {
+          // TODO validate :countryCode against a list of known country codes
+          return $route.current.params.countryCode;
         }
       }
     }).when('/error', {
@@ -72,12 +81,14 @@ angular.module('CountriesCapitals', ['ngRoute'])
     });
   })
 
-  .controller('CountriesCtrl', function($scope, cnc_Countries) {
-    $scope.countries = cnc_Countries();
+  .controller('CountriesCtrl', function($scope, cnc_GetCountryDetails) {
+    $scope.countries = cnc_GetCountryDetails();
   })
 
-  .controller('CapitalCtrl', function($scope, country, cnc_CountryDetail) {
-    $scope.country = country;
-    $scope.countryDetails = cnc_CountryDetail(country);
+  .controller('CapitalCtrl', function($scope, countryCode, cnc_GetCountryDetails, cnc_GetCapitalDetails, cnc_GetNeighbors) {
+    $scope.countryCode = countryCode;
+    $scope.countryDetails = cnc_GetCountryDetails(countryCode);
+    $scope.capitalDetails = cnc_GetCapitalDetails(countryCode);
+    $scope.neighbors = cnc_GetNeighbors(countryCode);
   });
 

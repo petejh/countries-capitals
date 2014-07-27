@@ -1,26 +1,20 @@
-<h1>{{ country }}</h1>
-<p>
-  This view shows detailed information about a country. The following data will be displayed: country name, population of country, area in square kilometers, capital, population of capital, continent, timezone, and number and names of neighboring countries.
-</p>
-<p>
-  This view will also display an image of the flag and map for the country.
-</p>
+<h1>{{ countryDetails[0].countryName }}</h1>
 <table>
   <tr>
     <td>Population of Country:</td>
-    <td>{{ countryDetails.population | number }}</td>
+    <td>{{ countryDetails[0].population | number }}</td>
   </tr>
   <tr>
     <td>Area:</td>
-    <td>{{ countryDetails.areaInSqKm | number }}</td>
+    <td>{{ countryDetails[0].areaInSqKm | number }}</td>
   </tr>
   <tr>
     <td>Capital:</td>
-    <td>{{ countryDetails.capital }}</td>
+    <td>{{ countryDetails[0].capital }}</td>
   </tr>
   <tr>
     <td>Population of Capital:</td>
-    <td></td>
+    <td>{{ capitalDetails[0].population | number }}</td>
   </tr>
   <tr>
     <td>Timezone:</td>
@@ -28,15 +22,15 @@
   </tr>
   <tr>
     <td>Continent:</td>
-    <td>{{ countryDetails.continent }}</td>
+    <td>{{ countryDetails[0].continent }}</td>
   </tr>
   <tr>
-    <td>Neighbors:</td>
-    <td></td>
+    <td>{{ neighbors.length }} Neighbors:</td>
+    <td><span ng-repeat="neighbor in neighbors"><a ng-href="#/countries/{{ neighbor.countryCode }}/capital">{{ neighbor.name }}</a>, </span></td>
   </tr>
 </table>
-<img ng-src="http://www.geonames.org/img/country/250/{{ country }}.png">
-<img ng-src="http://www.geonames.org/flags/x/{{ country.toLowerCase() }}.gif">
+<img ng-src="http://www.geonames.org/img/country/250/{{ countryCode }}.png">
+<img ng-src="http://www.geonames.org/flags/x/{{ countryCode.toLowerCase() }}.gif">
 <p>
   <a href="#">Home</a> |
   <a href="#countries">Browse Countries</a>
