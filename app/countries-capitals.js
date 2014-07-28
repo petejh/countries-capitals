@@ -7,12 +7,13 @@ angular.module('CountriesCapitals', ['ngRoute'])
     COUNTRY_ENDPOINT: '/countryInfoJSON',
     NEIGHBORS_ENDPOINT: '/neighboursJSON', // note UK spelling for endpoint
     CAPITAL_ENDPOINT: '/searchJSON',
+    TIMEZONE_ENDPOINT: '/timezoneJSON',
     USERNAME: 'petejh'
   })
 
-  .factory('cnc_GetGeonames', function($http, CNC_API_CONFIG) {
+  .factory('cnc_GetGeonames', function($q, $http, CNC_API_CONFIG) {
     return function(endpoint, queryParams) {
-      var geonamesAttributes = [];
+      var defer = $q.defer();
       var apiParams = {
         username: CNC_API_CONFIG.USERNAME,
         callback: CNC_API_CONFIG.CALLBACK
@@ -23,23 +24,33 @@ angular.module('CountriesCapitals', ['ngRoute'])
         params: angular.extend( apiParams, queryParams),
         cache: true
       }).success(function(response) {
-        angular.copy(response.geonames, geonamesAttributes);
+        defer.resolve(response);
       });
-      return geonamesAttributes;
+      return defer.promise;
     };
   })
 
   .factory('cnc_GetCountryDetails', function($http, CNC_API_CONFIG, cnc_GetGeonames) {
     return function(countryCode) {
       var queryParams = { country: countryCode };
-      return cnc_GetGeonames(CNC_API_CONFIG.COUNTRY_ENDPOINT, queryParams);
+      return cnc_GetGeonames(CNC_API_CONFIG.COUNTRY_ENDPOINT, queryParams)
+        .then(function(countryDetails) {
+          if (countryCode) {
+            return countryDetails.geonames[0];
+          } else {
+            return countryDetails.geonames;
+          }
+        });
     };
   })
 
   .factory('cnc_GetNeighbors', function($http, CNC_API_CONFIG, cnc_GetGeonames) {
     return function(countryCode) {
       var queryParams = { country: countryCode };
-      return cnc_GetGeonames(CNC_API_CONFIG.NEIGHBORS_ENDPOINT, queryParams);
+      return cnc_GetGeonames(CNC_API_CONFIG.NEIGHBORS_ENDPOINT, queryParams)
+        .then(function(neighbors) {
+          return neighbors.geonames;
+        });
     };
   })
 
@@ -49,7 +60,23 @@ angular.module('CountriesCapitals', ['ngRoute'])
         featureCode: 'PPLC',
         country: countryCode
       };
-      return cnc_GetGeonames(CNC_API_CONFIG.CAPITAL_ENDPOINT, queryParams);
+      return cnc_GetGeonames(CNC_API_CONFIG.CAPITAL_ENDPOINT, queryParams)
+        .then(function(capitalDetails) {
+          return capitalDetails.geonames[0];
+        });
+    };
+  })
+
+  .factory('cnc_GetTimezoneInfo', function($http, CNC_API_CONFIG, cnc_GetGeonames) {
+    return function(latitude, longitude) {
+      var queryParams = {
+        lat: latitude,
+        lng: longitude
+      };
+      return cnc_GetGeonames(CNC_API_CONFIG.TIMEZONE_ENDPOINT, queryParams)
+        .then(function(timezoneInfo) {
+          return timezoneInfo;
+        });
     };
   })
 
@@ -82,13 +109,29 @@ angular.module('CountriesCapitals', ['ngRoute'])
   })
 
   .controller('CountriesCtrl', function($scope, cnc_GetCountryDetails) {
-    $scope.countries = cnc_GetCountryDetails();
+    cnc_GetCountryDetails().then(function(result) {
+      $scope.countries = result;
+    });
   })
 
-  .controller('CapitalCtrl', function($scope, countryCode, cnc_GetCountryDetails, cnc_GetCapitalDetails, cnc_GetNeighbors) {
+  .controller('CapitalCtrl', function($scope, countryCode, cnc_GetCountryDetails, cnc_GetCapitalDetails, cnc_GetNeighbors, cnc_GetTimezoneInfo) {
     $scope.countryCode = countryCode;
-    $scope.countryDetails = cnc_GetCountryDetails(countryCode);
-    $scope.capitalDetails = cnc_GetCapitalDetails(countryCode);
-    $scope.neighbors = cnc_GetNeighbors(countryCode);
+
+    cnc_GetCountryDetails(countryCode).then(function(countryDetails) {
+      $scope.countryDetails = countryDetails;
+    });
+
+    cnc_GetCapitalDetails(countryCode).then(function(capitalDetails) {
+      $scope.capitalDetails = capitalDetails;
+
+      cnc_GetTimezoneInfo(capitalDetails.lat, capitalDetails.lng)
+        .then(function(timezoneInfo) {
+          $scope.timezoneInfo = timezoneInfo;
+        });
+    });
+
+    cnc_GetNeighbors(countryCode).then(function(neighbors) {
+      $scope.neighbors = neighbors;
+    });
   });
 

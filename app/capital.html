@@ -1,28 +1,28 @@
-<h1>{{ countryDetails[0].countryName }}</h1>
+<h1>{{ countryDetails.countryName }}</h1>
 <table>
   <tr>
     <td>Population of Country:</td>
-    <td>{{ countryDetails[0].population | number }}</td>
+    <td>{{ countryDetails.population | number }}</td>
   </tr>
   <tr>
-    <td>Area:</td>
-    <td>{{ countryDetails[0].areaInSqKm | number }}</td>
+    <td>Area (sq.km):</td>
+    <td>{{ countryDetails.areaInSqKm | number }}</td>
   </tr>
   <tr>
     <td>Capital:</td>
-    <td>{{ countryDetails[0].capital }}</td>
+    <td>{{ countryDetails.capital }}</td>
   </tr>
   <tr>
     <td>Population of Capital:</td>
-    <td>{{ capitalDetails[0].population | number }}</td>
+    <td>{{ capitalDetails.population | number }}</td>
   </tr>
   <tr>
-    <td>Timezone:</td>
-    <td></td>
+    <td>Timezone (Capital):</td>
+    <td>{{ timezoneInfo.timezoneId }}</td>
   </tr>
   <tr>
     <td>Continent:</td>
-    <td>{{ countryDetails[0].continent }}</td>
+    <td>{{ countryDetails.continent }}</td>
   </tr>
   <tr>
     <td>{{ neighbors.length }} Neighbors:</td>
