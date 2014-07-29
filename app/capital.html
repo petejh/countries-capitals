@@ -1,38 +1,40 @@
 <h1>{{ countryDetails.countryName }}</h1>
-<table>
-  <tr>
-    <td>Population of Country:</td>
-    <td>{{ countryDetails.population | number }}</td>
+<table id="country-details">
+  <tr class="row-odd">
+    <td class="country-attribute">Population of Country:</td>
+    <td class="country-value">{{ countryDetails.population | number }}</td>
   </tr>
-  <tr>
-    <td>Area (sq.km):</td>
-    <td>{{ countryDetails.areaInSqKm | number }}</td>
+  <tr class="row-even">
+    <td class="country-attribute">Area (sq.km):</td>
+    <td class="country-value">{{ countryDetails.areaInSqKm | number }}</td>
   </tr>
-  <tr>
-    <td>Capital:</td>
-    <td>{{ countryDetails.capital }}</td>
+  <tr class="row-odd">
+    <td class="country-attribute">Capital:</td>
+    <td class="country-value">{{ countryDetails.capital }}</td>
   </tr>
-  <tr>
-    <td>Population of Capital:</td>
-    <td>{{ capitalDetails.population | number }}</td>
+  <tr class="row-even">
+    <td class="country-attribute">Population of Capital:</td>
+    <td class="country-value">{{ capitalDetails.population | number }}</td>
   </tr>
-  <tr>
-    <td>Timezone (Capital):</td>
-    <td>{{ timezoneInfo.timezoneId }}</td>
+  <tr class="row-odd">
+    <td class="country-attribute">Timezone (Capital):</td>
+    <td class="country-value">{{ timezoneInfo.timezoneId }}</td>
   </tr>
-  <tr>
-    <td>Continent:</td>
-    <td>{{ countryDetails.continent }}</td>
+  <tr class="row-even">
+    <td class="country-attribute">Continent:</td>
+    <td class="country-value">{{ countryDetails.continent }}</td>
   </tr>
-  <tr>
-    <td>{{ neighbors.length }} Neighbors:</td>
-    <td><span ng-repeat="neighbor in neighbors"><a ng-href="#/countries/{{ neighbor.countryCode }}/capital">{{ neighbor.name }}</a>, </span></td>
+  <tr class="row-odd">
+    <td class="country-attribute">{{ neighbors.length }} Neighbors:</td>
+    <td class="country-value"><span ng-repeat="neighbor in neighbors"><a ng-href="#/countries/{{ neighbor.countryCode }}/capital">{{ neighbor.name }}</a>, </span></td>
   </tr>
 </table>
-<img ng-src="http://www.geonames.org/img/country/250/{{ countryCode }}.png">
-<img ng-src="http://www.geonames.org/flags/x/{{ countryCode.toLowerCase() }}.gif">
-<p>
-  <a href="#">Home</a> |
-  <a href="#countries">Browse Countries</a>
-</p>
+<div id="country-graphics">
+  <img id="map" ng-src="http://www.geonames.org/img/country/250/{{ countryCode }}.png">
+  <img id = "flag" ng-src="http://www.geonames.org/flags/x/{{ countryCode.toLowerCase() }}.gif">
+</div>
+<div class="action">
+  <a class="btn" href="#">Home</a> |
+  <a class="btn" href="#countries">Browse Countries</a>
+</div>
 

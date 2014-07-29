@@ -30,3 +30,76 @@ table {
   margin: 1rem auto;
 }
 
+#country-list {
+  width: 66rem;
+}
+
+th {
+  padding: 0 1rem;
+  color: #fff;
+  background-color: #000;
+}
+
+tr {
+  height: 2rem;
+}
+
+td {
+  padding: 0 1em;
+}
+
+.row-odd {
+  background-color: #f0f8ff;
+}
+
+.row-even {
+  background-color: #fffff0;
+}
+
+.column-code {
+  text-align: center;
+}
+
+.column-number {
+  text-align: right;
+}
+
+#country-details {
+  width: 30rem;
+}
+
+#country-details td {
+  width: 50%;
+}
+
+.country-value {
+  text-align: right;
+}
+
+#country-graphics {
+  width: 50rem;
+  margin: 1rem auto;
+}
+
+#map, #flag {
+  width: 45%;
+  vertical-align: middle;
+}
+
+#flag {
+  float: right;
+}
+
+.action {
+  width: 30rem;
+  margin: 1rem auto;
+  text-align: center;
+}
+
+.btn {
+  margin: 0 0.5rem;
+  padding: 4px;
+  border: 1px solid #000;
+  border-radius: 5px;
+}
+
