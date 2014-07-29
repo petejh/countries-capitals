@@ -11,6 +11,7 @@
     "url": "https://github.com/petejh0/countries-capitals/issues"
   },
   "devDependencies": {
-    "gulp": "^3.8.5"
+    "gulp": "^3.8.6",
+    "gulp-webserver": "^0.4.0"
   }
 }

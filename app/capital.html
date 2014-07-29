@@ -26,7 +26,7 @@
   </tr>
   <tr class="row-odd">
     <td class="country-attribute">{{ neighbors.length }} Neighbors:</td>
-    <td class="country-value"><span ng-repeat="neighbor in neighbors"><a ng-href="#/countries/{{ neighbor.countryCode }}/capital">{{ neighbor.name }}</a>, </span></td>
+    <td class="country-value"><span ng-repeat="neighbor in neighbors"><a ng-href="#/countries/{{ neighbor.countryCode }}/capital">{{ neighbor.name }}</a><span ng-if="!$last">, </span></span></td>
   </tr>
 </table>
 <div id="country-graphics">

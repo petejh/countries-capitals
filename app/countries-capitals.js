@@ -13,20 +13,16 @@ angular.module('CountriesCapitals', ['ngRoute'])
 
   .factory('cnc_GetGeonames', function($q, $http, CNC_API_CONFIG) {
     return function(endpoint, queryParams) {
-      var defer = $q.defer();
       var apiParams = {
         username: CNC_API_CONFIG.USERNAME,
         callback: CNC_API_CONFIG.CALLBACK
       };
-      $http({
+      return $http({
         method: CNC_API_CONFIG.METHOD,
         url: CNC_API_CONFIG.API_BASE + endpoint,
         params: angular.extend( apiParams, queryParams),
         cache: true
-      }).success(function(response) {
-        defer.resolve(response);
       });
-      return defer.promise;
     };
   })
 
@@ -36,9 +32,9 @@ angular.module('CountriesCapitals', ['ngRoute'])
       return cnc_GetGeonames(CNC_API_CONFIG.COUNTRY_ENDPOINT, queryParams)
         .then(function(countryDetails) {
           if (countryCode) {
-            return countryDetails.geonames[0];
+            return countryDetails.data.geonames[0];
           } else {
-            return countryDetails.geonames;
+            return countryDetails.data.geonames;
           }
         });
     };
@@ -49,7 +45,7 @@ angular.module('CountriesCapitals', ['ngRoute'])
       var queryParams = { country: countryCode };
       return cnc_GetGeonames(CNC_API_CONFIG.NEIGHBORS_ENDPOINT, queryParams)
         .then(function(neighbors) {
-          return neighbors.geonames;
+          return neighbors.data.geonames;
         });
     };
   })
@@ -62,7 +58,7 @@ angular.module('CountriesCapitals', ['ngRoute'])
       };
       return cnc_GetGeonames(CNC_API_CONFIG.CAPITAL_ENDPOINT, queryParams)
         .then(function(capitalDetails) {
-          return capitalDetails.geonames[0];
+          return capitalDetails.data.geonames[0];
         });
     };
   })
@@ -75,7 +71,7 @@ angular.module('CountriesCapitals', ['ngRoute'])
       };
       return cnc_GetGeonames(CNC_API_CONFIG.TIMEZONE_ENDPOINT, queryParams)
         .then(function(timezoneInfo) {
-          return timezoneInfo;
+          return timezoneInfo.data;
         });
     };
   })
