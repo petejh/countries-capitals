@@ -111,23 +111,43 @@ angular.module('CountriesCapitals', ['ngRoute'])
   })
 
   .controller('CapitalCtrl', function($scope, countryCode, cnc_GetCountryDetails, cnc_GetCapitalDetails, cnc_GetNeighbors, cnc_GetTimezoneInfo) {
-    $scope.countryCode = countryCode;
 
-    cnc_GetCountryDetails(countryCode).then(function(countryDetails) {
-      $scope.countryDetails = countryDetails;
-    });
+    var getCapitalDetails = function() {
+      return cnc_GetCapitalDetails(countryCode)
+        .then(function(capitalDetails) {
+          $scope.capitalDetails = capitalDetails;
+          return capitalDetails;
+        });
+    };
 
-    cnc_GetCapitalDetails(countryCode).then(function(capitalDetails) {
-      $scope.capitalDetails = capitalDetails;
+    var getCountryDetails = function () {
+      return cnc_GetCountryDetails(countryCode)
+        .then(function(countryDetails) {
+          $scope.countryDetails = countryDetails;
+          return countryDetails;
+        });
+    };
 
-      cnc_GetTimezoneInfo(capitalDetails.lat, capitalDetails.lng)
+    var getNeighbors = function () {
+      return cnc_GetNeighbors(countryCode)
+        .then(function(neighbors) {
+          $scope.neighbors = neighbors;
+          return neighbors;
+        });
+    };
+
+    var getTimezoneInfo = function(capitalDetails) {
+      return cnc_GetTimezoneInfo(capitalDetails.lat, capitalDetails.lng)
         .then(function(timezoneInfo) {
           $scope.timezoneInfo = timezoneInfo;
+          return timezoneInfo;
         });
-    });
+    };
 
-    cnc_GetNeighbors(countryCode).then(function(neighbors) {
-      $scope.neighbors = neighbors;
-    });
+    $scope.countryCode = countryCode;
+
+    getCountryDetails();
+    getCapitalDetails().then(getTimezoneInfo);
+    getNeighbors(countryCode);
   });
 
