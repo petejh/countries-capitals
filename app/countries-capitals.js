@@ -1,4 +1,4 @@
-angular.module('CountriesCapitals', ['ngRoute'])
+angular.module('CountriesCapitals', ['ngRoute', 'ngAnimate'])
 
   .constant('CNC_API_CONFIG', {
     API_BASE: 'http://api.geonames.org',
@@ -21,6 +21,7 @@ angular.module('CountriesCapitals', ['ngRoute'])
         method: CNC_API_CONFIG.METHOD,
         url: CNC_API_CONFIG.API_BASE + endpoint,
         params: angular.extend( apiParams, queryParams),
+        timeout: 5000,
         cache: true
       });
     };
@@ -98,9 +99,17 @@ angular.module('CountriesCapitals', ['ngRoute'])
     });
   })
 
-  .run(function($rootScope, $location) {
+  .run(function($rootScope, $location, $timeout) {
     $rootScope.$on('$routeChangeError', function() {
       $location.path('/error');
+    });
+    $rootScope.$on('$routeChangeStart', function() {
+      $rootScope.isLoading = true;
+    });
+    $rootScope.$on('$routeChangeSuccess', function() {
+      $timeout(function() {
+        $rootScope.isLoading = false;
+      }, 2000);
     });
   })
 
