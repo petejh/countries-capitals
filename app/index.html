@@ -4,8 +4,10 @@
   <meta charset="utf-8">
   <title>Countries & Capitals</title>
 
+  <!-- build:css ./cnc.min.css -->
   <link rel="stylesheet" href="./bower_components/normalize.css/normalize.css">
   <link rel="stylesheet" href="./countries-capitals.css">
+  <!-- endbuild -->
 </head>
 <body>
   <h1 id="masthead">Countries & Capitals</h1>
@@ -13,10 +15,12 @@
     <div ng-view></div>
   </div>
 
+  <!-- build:js ./cnc.min.js -->
   <script src="./bower_components/angular/angular.js"></script>
   <script src="./bower_components/angular-route/angular-route.js"></script>
   <script src="./bower_components/angular-animate/angular-animate.js"></script>
   <script src="./countries-capitals.js"></script>
+  <!-- endbuild -->
 </body>
 </html>
 
