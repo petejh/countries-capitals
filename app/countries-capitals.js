@@ -24,5 +24,17 @@ angular.module('CountriesCapitals', ['ngRoute'])
     $rootScope.$on('$routeChangeError', function() {
       $location.path('/error');
     });
+  })
+
+  .factory('cnc_getCountryDetails', function($http) {
+    return function() {
+      return $http({
+        method: 'JSONP',
+        url: 'http://api.geonames.org/countryInfoJSON',
+        params: {
+          callback: 'JSON_CALLBACK'
+        }
+      });
+    };
   });
 
