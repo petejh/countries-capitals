@@ -27,8 +27,8 @@ describe("getCountryDetails service", function() {
   it('returns a list of countries with their details', inject(function($httpBackend, cnc_getCountryDetails) {
     $httpBackend.expectJSONP(/geonames/).respond(countriesResponse);
     var countries = cnc_getCountryDetails();
-    expect(countries.length).toBe(3);
     $httpBackend.flush();
+    expect(countries.length).toBe(3);
   }));
 });
 

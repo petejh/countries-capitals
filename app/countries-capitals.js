@@ -28,13 +28,17 @@ angular.module('CountriesCapitals', ['ngRoute'])
 
   .factory('cnc_getCountryDetails', function($http) {
     return function() {
-      return $http({
+      var countryDetails = [];
+      $http({
         method: 'JSONP',
         url: 'http://api.geonames.org/countryInfoJSON',
         params: {
           callback: 'JSON_CALLBACK'
         }
+      }).success(function(data) {
+        angular.copy(data, countryDetails);
       });
+      return countryDetails;
     };
   });
 
