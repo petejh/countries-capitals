@@ -58,8 +58,9 @@ module.exports = function(config) {
 
     // start these browsers
     // available browser launchers: https://npmjs.org/browse/keyword/karma-launcher
-    browsers: ['Chrome'],
+    browsers: ['PhantomJS'],
 
+    // By default, Karma loads all sibling NPM modules which have a name starting with karma-*.
 
     // Continuous Integration mode
     // if true, Karma captures browsers, runs the tests and exits

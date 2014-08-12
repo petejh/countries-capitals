@@ -30,7 +30,7 @@ var karmaConf = {
     'app/bower_components/**/angular-mocks.js',
     'app/*.js'
   ],
-  browsers: ['Chrome'],
+  browsers: ['PhantomJS'],
   reporters: ['spec']
 };
 
